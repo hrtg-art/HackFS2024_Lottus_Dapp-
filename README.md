@@ -14,3 +14,9 @@ Entry for HackFS2024 By Heritage
   -Modified the README File
 
   ![Modified Layout for Lottus](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-17_134807331.png?alt=media&token=6c51cf2e-b131-47f0-97dc-9dd3393441e2)
+
+**Third Commit:** 
+  -Worked on the Basic Layout of the Dapp. placing components provided by [**DaisyUi**](https://daisyui.com)
+  -Added to components, The *CountDown* and the *CounterComponent*, both need some tweaking but it works for getting an idea. 
+
+   ![Basic Layout For Lottus](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-17_173746413.png?alt=media&token=237f79c8-847d-42aa-94de-54ada4485d01)

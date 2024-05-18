@@ -8,6 +8,8 @@ import Countdown from "~~/components/Countdown";
 // import { Address } from "~~/components/scaffold-eth";
 import CounterComponent from "~~/components/CounterComponent";
 
+// Import the BlockExplorer component
+
 // import React, { useState } from 'react';
 
 const Home: NextPage = () => {
@@ -20,7 +22,7 @@ const Home: NextPage = () => {
           <h1 className="text-center">
             <span className="block text-2xl mb-2">Welcome to</span>
             <span className="block text-8xl font-bold">Lottus</span>
-            <span className="block text-1xl mb-4">Get a chance of winning by helping others...</span>
+            <span className="block text-1xl mb-4">Get a chance of winning by helping others&#39;...</span>
           </h1>
           <div className="flex flex-col w-full">
             <div className="grid place-items-center">
@@ -28,7 +30,7 @@ const Home: NextPage = () => {
             </div>
 
             <h1 className="text-center p-5">
-              <span className="block text-2xl font-bold">Enter The main Lottus Round</span>
+              <span className="stat-value p-2">Enter The main Lottus Round</span>
             </h1>
 
             <div className="flex justify-center">
@@ -119,6 +121,130 @@ const Home: NextPage = () => {
 
             <div className="divider divider-success"></div>
           </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto p-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Columna 1: Ganadores Recientes y Donaciones Recientes */}
+          <div className="p-5 bg-base-300 shadow-lg rounded-box">
+            <div className="mb-5">
+              <h2 className="stat-value p-1 text-center">Recent Winners</h2>
+              <ul className="list-disc list-inside">
+                <li>Ganador 1</li>
+                <li>Ganador 2</li>
+                <li>Ganador 3</li>
+                {/* Añade más ganadores aquí */}
+              </ul>
+            </div>
+            <div>
+              <h2 className="stat-value p-1 text-center">Recent Donations</h2>
+              <ul className="list-disc list-inside">
+                <li>Donación 1</li>
+                <li>Donación 2</li>
+                <li>Donación 3</li>
+                {/* Añade más donaciones aquí */}
+              </ul>
+            </div>
+          </div>
+
+          {/* Columna 2: Suggest the Next Charity */}
+          <div className="p-5 bg-base-300 shadow-lg rounded-box">
+            <h2 className="stat-value p-1 text-center">Suggest the Next Charity</h2>
+            <p className="mt-3 p-5 text-center">
+              You can suggest the next charity organization to donate to here. Share your suggestions and help decide
+              the next cause to support.
+            </p>
+            <div className="flex justify-center mt-3">
+              <button className="btn btn-primary px-10">Fill the Form</button>
+            </div>
+            {/* Add a form or any other content here */}
+          </div>
+
+          {/* Columna 3: NFT Awards & Certificates */}
+          <div className="p-5 bg-base-300 shadow-lg rounded-box w-[600px]">
+            <h2 className="stat-value p-1 text-center">NFT Awards & Certificates</h2>
+            <div className="flex justify-center mt-3 space-x-2">
+              <div className="w-1/2 h-32 bg-gray-300 flex items-center justify-center">
+                <span className="text-center text-gray-600">Winner NFT</span>
+              </div>
+              <div className="w-1/2 h-32 bg-gray-300 flex items-center justify-center">
+                <span className="text-center text-gray-600">Participant NFT</span>
+              </div>
+            </div>
+            <p className="mt-3 text-center">
+              There may be more prizes depending on collaborations with other dApps or protocols.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h1 className="text-center pt-20">
+        <span className="stat-value p-2">F.A.Q</span>
+      </h1>
+      <div className="flex items-center flex-col flex-grow pt-5">
+        <div className="w-[1500px] px-5 space-y-4">
+          <div className="collapse bg-base-200 w-full">
+            <input type="checkbox" className="peer" />
+            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+              What is Lottus and how does it work?
+            </div>
+            <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
+              <p>
+                Lottus is a decentralized donation platform that operates like a lottery. Each week, a new charity is
+                selected to receive 40% of the donation pool, while another 40% goes to the raffle winner. The remaining
+                20% is allocated to the development team. The winner receives a prize in cryptocurrency and a
+                commemorative NFT, while all participants receive a participation NFT.
+              </p>
+            </div>
+          </div>
+
+          <div className="collapse bg-base-200 w-full">
+            <input type="checkbox" className="peer" />
+            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+              How can I participate in a Lottus lottery?
+            </div>
+            <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
+              <p>
+                To participate in a Lottus lottery, simply select the number of tickets you want to purchase and
+                complete the transaction through your wallet. Our smart contract will handle the rest. You can view the
+                total prize pool before finalizing your transaction to ensure that your donation does not exceed the
+                current prize pool, avoiding the risk of receiving less than you donated. Once your transaction is
+                confirmed, you will be automatically entered into the raffle for the current week.
+              </p>
+            </div>
+          </div>
+
+          <div className="collapse bg-base-200 w-full">
+            <input type="checkbox" className="peer" />
+            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+              How is the raffle winner selected and how is fairness ensured?
+            </div>
+            <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
+              <p>
+                The raffle winner is selected using Chainlink VRF Verifiable Random Function, which ensures that the
+                selection process is truly random and transparent. This technology provides a provably fair and
+                tamper-proof source of randomness, ensuring the integrity of the raffle.
+              </p>
+            </div>
+          </div>
+
+          <div className="collapse bg-base-200 w-full">
+            <input type="checkbox" className="peer" />
+            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+              What are the NFTs?
+            </div>
+            <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
+              <p>
+                Lottus issues two types of NFTs: Winner NFTs and Participation NFTs. Winner NFTs are awarded to the
+                weekly raffle winner and commemorate their victory. Participation NFTs are given to all participants as
+                a token of appreciation for their contribution. Both types of NFTs are personalized with the recipients
+                wallet address or ENS name, and their metadata is securely stored on IPFS and backed up on Filecoin.
+              </p>
+            </div>
+          </div>
+
+          {/* Add more collapse items as needed */}
         </div>
       </div>
     </>

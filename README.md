@@ -20,3 +20,15 @@ Entry for HackFS2024 By Heritage
   -Added to components, The *CountDown* and the *CounterComponent*, both need some tweaking but it works for getting an idea. 
 
    ![Basic Layout For Lottus](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-17_173746413.png?alt=media&token=237f79c8-847d-42aa-94de-54ada4485d01)
+
+ **Fourth Commit:** 
+  -Added 4 new components: 
+      -A column where people will be able to see the recent winners, and recent donations done by Lottus.
+      -A column where users will be able to fill a form to suggest the next charity we should support.
+      -A column where the users will be able to view the NFTs that they can earn as a thank you for participating and the one for the winner.
+      -4 FAQ tabs where i explain what Lottus is and how would it work. 
+
+  -No Smart contract has been created yet, this comes in the next Commit. 
+
+   ![More Complex Layout For Lottus](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-17_193147892.png?alt=media&token=67670985-0450-4256-a216-958e8a1f82ae)
+

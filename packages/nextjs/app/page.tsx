@@ -1,21 +1,26 @@
 "use client";
 
-// import Link from "next/link";
+import React, { useState } from "react";
 import type { NextPage } from "next";
+import { useAccount } from "wagmi";
 import Countdown from "~~/components/Countdown";
-// import { useAccount } from "wagmi";
-// import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-// import { Address } from "~~/components/scaffold-eth";
 import CounterComponent from "~~/components/CounterComponent";
 import { Address } from "~~/components/scaffold-eth";
-import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
-  // const { address: connectedAddress } = useAccount();
+  const [quantity, setQuantity] = useState(1);
+  const { address: connectedAddress } = useAccount();
 
+  // Reading Functions From Lottus SmartContract
   const { data: price1 } = useScaffoldReadContract({
     contractName: "LottusLottery",
     functionName: "getPrizePool",
+  });
+
+  const { data: PrizeAmount } = useScaffoldReadContract({
+    contractName: "LottusLottery",
+    functionName: "lastPrizeAmount",
   });
 
   const { data: CurrentLottus } = useScaffoldReadContract({
@@ -35,7 +40,7 @@ const Home: NextPage = () => {
   const [, , , , Charity] = CurrentLottus || [];
   const isActive = CurrentLottus ? CurrentLottus[7] : false;
 
-  const ethValueNumber = ethValue ? Number(BigInt(ethValue.toString())) / 1e18 : 0;
+  const ethValueNumber = ethValue ? Number(BigInt(ethValue.toString())) : 0;
 
   const { data: TicketsSold } = useScaffoldReadContract({
     contractName: "LottusLottery",
@@ -44,6 +49,25 @@ const Home: NextPage = () => {
 
   const numberOfParticipants = TicketsSold ? TicketsSold.length : 0;
   const uniqueParticipants = TicketsSold ? new Set(TicketsSold).size : 0;
+  const ticketsOwned = TicketsSold ? TicketsSold.filter((address: string) => address === connectedAddress).length : 0;
+
+  // Writing to Lottus Smart Contract
+  const { writeContractAsync: buyTicket } = useScaffoldWriteContract("LottusLottery");
+
+  const handleBuyTickets = async () => {
+    if (quantity > 0 && ethValue !== undefined) {
+      const totalValue = ethValue * BigInt(quantity); // Total value en wei
+      try {
+        await buyTicket({
+          functionName: "buyTicket",
+          args: [BigInt(quantity)],
+          value: totalValue,
+        });
+      } catch (e) {
+        console.error("Error buying tickets:", e);
+      }
+    }
+  };
 
   return (
     <>
@@ -52,11 +76,13 @@ const Home: NextPage = () => {
           <h1 className="text-center">
             <span className="block text-2xl mb-2">Welcome to</span>
             <span className="block text-8xl font-bold">Lottus</span>
-            <span className="block text-1xl mb-4">Get a chance of winning by helping others&#39;...</span>
+            <span className="block text-1xl mb-4">
+              The Help 2 Earn System Where you can get rewarded by being a good soul...
+            </span>
           </h1>
           <div className="flex flex-col w-full">
             <div className="grid place-items-center">
-              <div className="grid h-[300px] w-[900px] card bg-base-300 rounded-box place-items-center">content</div>
+              <div className="grid h-[400px] w-[1500px] card bg-base-300 rounded-box place-items-center">content</div>
             </div>
 
             <h1 className="text-center p-5">
@@ -69,7 +95,76 @@ const Home: NextPage = () => {
               <span className="block text-1xl mb-10 w-[900px] text-center">{LottusDesc?.toString()}</span>
             </div>
 
-            <div className="stats shadow">
+            <div className="flex flex-col items-center pt-5 pb-10 space-y-10">
+              <div className="flex justify-center items-center pt-5 pb-10 space-x-32">
+                {/* Columna 1 */}
+                <div className="flex-2">
+                  <div className="indicator">
+                    <div className="indicator-item indicator-bottom"></div>
+                    <div className="stat-actions flex flex-col space-y-2 px-4">
+                      <CounterComponent ethValue={ethValueNumber / 1e18} onQuantityChange={setQuantity} />
+                      <div className="flex justify-center p-5">
+                        <button className="btn btn-primary" onClick={handleBuyTickets} disabled={!isActive}>
+                          {isActive ? "Buy Tickets" : "This Lottus has Ended"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Columna 2 */}
+                <div className="flex-1">
+                  {isActive ? (
+                    <div className="p-5">
+                      <div className="stat-value p-2 text-center">You Have:</div>
+                      <span className="block text-8xl font-bold text-center">{ticketsOwned}</span>
+                      <div className="stat-value p-2 text-center">Tickets For This Lottus</div>
+                    </div>
+                  ) : (
+                    <div className="p-5 text-center">
+                      {ticketsOwned > 0 ? (
+                        connectedAddress === LastWinner ? (
+                          <div>
+                            <div className="stat-value p-2">Congratulations!</div>
+                            <div className="text-xl">You were the winner of this Lottus.</div>
+                            <div className="text-xl">Not only that, you helped a charity receive:</div>
+                            <div className="stat-value pt-3 pb-5">
+                              {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH
+                            </div>
+                            <div className="text-xl">Check your wallet for the Winner NFT for being</div>
+                            <div className="text-xl">A good soul with good luck</div>
+                          </div>
+                        ) : (
+                          <div>
+                            <div className="stat-value p-2">You are still a hero!,</div>
+                            <div className="text-xl">Sadly you did not win this time</div>
+                            <div className="text-xl">but you still helped a charity receive:</div>
+                            <div className="stat-value pt-3 pb-5">
+                              {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH
+                            </div>
+                            <button className="btn btn-primary px-10">Claim The proof that you are a good soul</button>
+                          </div>
+                        )
+                      ) : (
+                        <div>
+                          <div className="stat-value p-2">This Lottus has ended.</div>
+                          <div className="text-xl">We raised:</div>
+                          <div className="stat-value pt-3 pb-5">
+                            {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH for charity
+                          </div>
+                          <div className="text-xl">But do not worry</div>
+                          <div className="text-xl">A new Lottus will be launching soon, do not miss it!</div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="divider divider-success pt-10"></div>
+
+            <div className="stats shadow ">
               <div style={{ display: "flex", alignItems: "center", padding: 10 }}>
                 {isActive ? (
                   <>
@@ -135,7 +230,7 @@ const Home: NextPage = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="2"
-                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                      d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
                     ></path>
                   </svg>
                 </div>
@@ -159,23 +254,9 @@ const Home: NextPage = () => {
                     ></path>
                   </svg>
                 </div>
-                <div className="stat-title">Prize Pool</div>
+                <div className="stat-title">Current Prize Pool</div>
                 <div className="stat-value">{price1 ? Number(BigInt(price1.toString())) / 1e18 : 0} ETH*</div>
                 <div className="stat-desc">*40% of the total</div>
-              </div>
-            </div>
-
-            <div className="flex justify-center items-center pt-10">
-              <div className="indicator">
-                <div className="indicator-item indicator-bottom"></div>
-                <div className="stat-actions flex flex-col space-y-2 px-4">
-                  <CounterComponent ethValue={ethValueNumber} />
-                  <div className="flex justify-center p-10">
-                    <button className="btn btn-primary" disabled={!isActive}>
-                      {isActive ? "Buy Tickets" : "This Lottus has Ended"}
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -184,28 +265,55 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      <div className="container mx-auto p-5">
+      <div className="container mx-auto p-5 pt-32">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Columna 1: Ganadores Recientes y Donaciones Recientes */}
-          <div className="p-5 bg-base-300 shadow-lg rounded-box">
-            <div className="mb-5">
-              <h2 className="stat-value p-1 text-center">Recent Winners</h2>
-              <ul className="list-disc list-inside">
-                <li>Ganador 1</li>
-                <li>Ganador 2</li>
-                <li>Ganador 3</li>
-                {/* Añade más ganadores aquí */}
-              </ul>
-            </div>
-            <div>
-              <h2 className="stat-value p-1 text-center">Recent Donations</h2>
-              <ul className="list-disc list-inside">
-                <li>Donación 1</li>
-                <li>Donación 2</li>
-                <li>Donación 3</li>
-                {/* Añade más donaciones aquí */}
-              </ul>
-            </div>
+          <div className="overflow-x-auto p-5 bg-base-300 shadow-lg rounded-box">
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Recent Winners</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>1</th>
+                  <td>Ganador 1</td>
+                </tr>
+                <tr>
+                  <th>2</th>
+                  <td>Ganador 2</td>
+                </tr>
+                <tr>
+                  <th>3</th>
+                  <td>Ganador 3</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table className="table w-full mt-5">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Recent Donations</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>1</th>
+                  <td>Donación 1</td>
+                </tr>
+                <tr>
+                  <th>2</th>
+                  <td>Donación 2</td>
+                </tr>
+                <tr>
+                  <th>3</th>
+                  <td>Donación 3</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           {/* Columna 2: Suggest the Next Charity */}
@@ -218,17 +326,16 @@ const Home: NextPage = () => {
             <div className="flex justify-center mt-3">
               <button className="btn btn-primary px-10">Fill the Form</button>
             </div>
-            {/* Add a form or any other content here */}
           </div>
 
           {/* Columna 3: NFT Awards & Certificates */}
-          <div className="p-5 bg-base-300 shadow-lg rounded-box w-[600px]">
+          <div className="p-5 bg-base-300 shadow-lg rounded-box w-[500px]">
             <h2 className="stat-value p-1 text-center">NFT Awards & Certificates</h2>
             <div className="flex justify-center mt-3 space-x-2">
-              <div className="w-1/2 h-32 bg-gray-300 flex items-center justify-center">
+              <div className="w-32 h-32 bg-gray-300 flex items-center justify-center">
                 <span className="text-center text-gray-600">Winner NFT</span>
               </div>
-              <div className="w-1/2 h-32 bg-gray-300 flex items-center justify-center">
+              <div className="w-32 h-32 bg-gray-300 flex items-center justify-center">
                 <span className="text-center text-gray-600">Participant NFT</span>
               </div>
             </div>

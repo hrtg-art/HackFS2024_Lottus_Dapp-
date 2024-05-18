@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface CounterComponentProps {
   ethValue: number;
+  onQuantityChange: (quantity: number) => void;
 }
 
-const CounterComponent: React.FC<CounterComponentProps> = ({ ethValue }) => {
+const CounterComponent: React.FC<CounterComponentProps> = ({ ethValue, onQuantityChange }) => {
   const [count, setCount] = useState(0);
 
   const increment = () => {
@@ -16,6 +17,10 @@ const CounterComponent: React.FC<CounterComponentProps> = ({ ethValue }) => {
       setCount(count - 1);
     }
   };
+
+  useEffect(() => {
+    onQuantityChange(count);
+  }, [count, onQuantityChange]);
 
   const total = (count * ethValue).toFixed(2);
 

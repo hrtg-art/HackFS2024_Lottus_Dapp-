@@ -35,6 +35,9 @@ contract LottusLottery is Ownable {
     WinnerRecord[] public winnerRecords;
     CharityRecord[] public charityRecords;
 
+    uint256 public lastPrizeAmount;
+    uint256 public lastCharityAmount;
+
     event LotteryCreated(uint256 indexed lotteryId, string name, address charity, uint256 endTime);
     event TicketPurchased(uint256 indexed lotteryId, address indexed participant, uint256 quantity);
     event WinnerSelected(uint256 indexed lotteryId, address indexed winner, uint256 prizeAmount);
@@ -96,7 +99,12 @@ contract LottusLottery is Ownable {
         require(participants.length > 0, "No participants");
 
         currentLottery.isActive = false;
-        address winner = participants[random() % participants.length];
+        uint256 randomNumber = random();
+        selectWinner(randomNumber);
+    }
+
+    function selectWinner(uint256 randomNumber) internal {
+        address winner = participants[randomNumber % participants.length];
         uint256 balance = address(this).balance;
         uint256 prizeAmount = balance * 40 / 100;
         uint256 charityAmount = balance * 40 / 100;
@@ -112,6 +120,9 @@ contract LottusLottery is Ownable {
         uint256 timestamp = block.timestamp;
         winnerRecords.push(WinnerRecord({winner: winner, amount: prizeAmount, timestamp: timestamp}));
         charityRecords.push(CharityRecord({charity: currentLottery.charity, amount: charityAmount, timestamp: timestamp}));
+
+        lastPrizeAmount = prizeAmount;
+        lastCharityAmount = charityAmount;
 
         emit WinnerSelected(currentLottery.id, winner, prizeAmount);
     }
@@ -151,7 +162,25 @@ contract LottusLottery is Ownable {
         return charityRecords;
     }
 
+    function getLastPrizeDetails() external view returns (uint256, uint256) {
+        return (lastPrizeAmount, lastCharityAmount);
+    }
+
     function random() private view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp, participants)));
+        bytes32 colorHash = keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender));
+        uint256 colorHex = uint256(colorHash) % 0xFFFFFF; // Genera un valor hexadecimal aleatorio
+        bytes32 finalHash = keccak256(
+            abi.encodePacked(
+                blockhash(block.number - 1),
+                block.timestamp,
+                participants,
+                block.difficulty,
+                gasleft(),
+                msg.sender,
+                address(this),
+                colorHex
+            )
+        );
+        return uint256(finalHash);
     }
 }

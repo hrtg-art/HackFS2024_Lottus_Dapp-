@@ -33,12 +33,13 @@ const Home: NextPage = () => {
     functionName: "getWinner",
   });
 
-  const [, , , ethValue] = CurrentLottus || [];
+  const [, , , Banner] = CurrentLottus || [];
+  const [, , , , ethValue] = CurrentLottus || [];
   const [, LottusName, ,] = CurrentLottus || [];
   const [LottusNumber, , ,] = CurrentLottus || [];
   const [, , LottusDesc] = CurrentLottus || [];
-  const [, , , , Charity] = CurrentLottus || [];
-  const isActive = CurrentLottus ? CurrentLottus[7] : false;
+  const [, , , , , Charity] = CurrentLottus || [];
+  const isActive = CurrentLottus ? CurrentLottus[8] : false;
 
   const ethValueNumber = ethValue ? Number(BigInt(ethValue.toString())) : 0;
 
@@ -82,7 +83,9 @@ const Home: NextPage = () => {
           </h1>
           <div className="flex flex-col w-full">
             <div className="grid place-items-center">
-              <div className="grid h-[400px] w-[1500px] card bg-base-300 rounded-box place-items-center">content</div>
+              <div className=" h-[400px] w-[1500px] card bg-base-300 rounded-box place-items-center overflow-hidden">
+                <img src={`https://ipfs.io/ipfs/${Banner}`} alt="Lottus Banner" className="w-full h-full object-fill" />
+              </div>
             </div>
 
             <h1 className="text-center p-5">

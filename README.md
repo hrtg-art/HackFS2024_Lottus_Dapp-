@@ -78,3 +78,15 @@ Entry for HackFS2024 By Heritage
  ## Next Step: 
 
  -Implementing protocols like IPFS for images and create the minting process of NFTs for winners and for Donors. 
+
+  **Seventh Commit:** 
+  -Launch of the second Smart Contract Focused on the creation and distribution of NFTs, Using IPFS to host the pictures and metadata, each NFT will be personalized providing a social proof that the user contributed to the charity.
+
+  -Improvements on the first Smart Contract, that includes, Usind a CID for the Banner of each new Lottus, this can be changed while the lottus is still live. in case there's an update.
+
+    -Included the function to send the Winner NFT automatically and another one to let the donors mint, theirs this function requires the lottus to have ended and also requires that the users have donated to the actual lottus.
+
+
+ ## Next Step: 
+
+ -Connecting the changes to the Front End, and start implementing Filebase as a backup for the files and registries of each lottus. 

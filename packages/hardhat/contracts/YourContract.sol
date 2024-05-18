@@ -2,12 +2,14 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./LottusNFT.sol";
 
 contract LottusLottery is Ownable {
     struct Lottery {
         uint256 id;
         string name;
         string description;
+        string bannerCID;
         uint256 ticketPrice;
         address charity;
         uint256 endTime;
@@ -38,19 +40,24 @@ contract LottusLottery is Ownable {
     uint256 public lastPrizeAmount;
     uint256 public lastCharityAmount;
 
+    LottusNFT public nftContract;
+
     event LotteryCreated(uint256 indexed lotteryId, string name, address charity, uint256 endTime);
     event TicketPurchased(uint256 indexed lotteryId, address indexed participant, uint256 quantity);
     event WinnerSelected(uint256 indexed lotteryId, address indexed winner, uint256 prizeAmount);
     event PrizePoolDeposited(uint256 amount);
+    event BannerCIDUpdated(uint256 indexed lotteryId, string newBannerCID);
 
-    constructor(address ownerAddress) {
+    constructor(address ownerAddress, address nftContractAddress) {
         transferOwnership(ownerAddress);
         currentLotteryId = 0;
+        nftContract = LottusNFT(nftContractAddress);
     }
 
     function createLottery(
         string memory name,
         string memory description,
+        string memory bannerCID,
         uint256 ticketPrice,
         address charity
     ) external onlyOwner {
@@ -65,6 +72,7 @@ contract LottusLottery is Ownable {
             id: currentLotteryId,
             name: name,
             description: description,
+            bannerCID: bannerCID,
             ticketPrice: ticketPrice,
             charity: charity,
             endTime: endTime,
@@ -74,6 +82,12 @@ contract LottusLottery is Ownable {
         });
 
         emit LotteryCreated(currentLotteryId, name, charity, endTime);
+    }
+
+    function updateBannerCID(string memory newBannerCID) external onlyOwner {
+        require(currentLottery.isActive, "No active lottery");
+        currentLottery.bannerCID = newBannerCID;
+        emit BannerCIDUpdated(currentLottery.id, newBannerCID);
     }
 
     function depositPrizePool() external payable onlyOwner {
@@ -124,6 +138,8 @@ contract LottusLottery is Ownable {
         lastPrizeAmount = prizeAmount;
         lastCharityAmount = charityAmount;
 
+        nftContract.mintWinnerNFT(winner, currentLottery.name, prizeAmount, currentLottery.charity);
+
         emit WinnerSelected(currentLottery.id, winner, prizeAmount);
     }
 
@@ -150,6 +166,10 @@ contract LottusLottery is Ownable {
         return currentLottery.description;
     }
 
+    function getBannerCID() external view returns (string memory) {
+        return currentLottery.bannerCID;
+    }
+
     function getPrizePool() external view returns (uint256) {
         return address(this).balance * 40 / 100;
     }
@@ -171,7 +191,7 @@ contract LottusLottery is Ownable {
         uint256 colorHex = uint256(colorHash) % 0xFFFFFF; // Genera un valor hexadecimal aleatorio
         bytes32 finalHash = keccak256(
             abi.encodePacked(
-                blockhash(block.number - 1),
+                               blockhash(block.number - 1),
                 block.timestamp,
                 participants,
                 block.difficulty,
@@ -184,3 +204,4 @@ contract LottusLottery is Ownable {
         return uint256(finalHash);
     }
 }
+

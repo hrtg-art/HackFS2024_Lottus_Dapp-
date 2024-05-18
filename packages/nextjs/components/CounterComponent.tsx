@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-const CounterComponent: React.FC = () => {
+interface CounterComponentProps {
+  ethValue: number;
+}
+
+const CounterComponent: React.FC<CounterComponentProps> = ({ ethValue }) => {
   const [count, setCount] = useState(0);
 
   const increment = () => {
@@ -13,7 +17,7 @@ const CounterComponent: React.FC = () => {
     }
   };
 
-  const total = (count * 0.01).toFixed(2);
+  const total = (count * ethValue).toFixed(2);
 
   return (
     <div className="flex flex-col items-center space-y-2">

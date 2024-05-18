@@ -7,13 +7,43 @@ import Countdown from "~~/components/Countdown";
 // import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 // import { Address } from "~~/components/scaffold-eth";
 import CounterComponent from "~~/components/CounterComponent";
-
-// Import the BlockExplorer component
-
-// import React, { useState } from 'react';
+import { Address } from "~~/components/scaffold-eth";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
   // const { address: connectedAddress } = useAccount();
+
+  const { data: price1 } = useScaffoldReadContract({
+    contractName: "LottusLottery",
+    functionName: "getPrizePool",
+  });
+
+  const { data: CurrentLottus } = useScaffoldReadContract({
+    contractName: "LottusLottery",
+    functionName: "currentLottery",
+  });
+
+  const { data: LastWinner } = useScaffoldReadContract({
+    contractName: "LottusLottery",
+    functionName: "getWinner",
+  });
+
+  const [, , , ethValue] = CurrentLottus || [];
+  const [, LottusName, ,] = CurrentLottus || [];
+  const [LottusNumber, , ,] = CurrentLottus || [];
+  const [, , LottusDesc] = CurrentLottus || [];
+  const [, , , , Charity] = CurrentLottus || [];
+  const isActive = CurrentLottus ? CurrentLottus[7] : false;
+
+  const ethValueNumber = ethValue ? Number(BigInt(ethValue.toString())) / 1e18 : 0;
+
+  const { data: TicketsSold } = useScaffoldReadContract({
+    contractName: "LottusLottery",
+    functionName: "getParticipants",
+  });
+
+  const numberOfParticipants = TicketsSold ? TicketsSold.length : 0;
+  const uniqueParticipants = TicketsSold ? new Set(TicketsSold).size : 0;
 
   return (
     <>
@@ -30,23 +60,49 @@ const Home: NextPage = () => {
             </div>
 
             <h1 className="text-center p-5">
-              <span className="stat-value p-2">Enter The main Lottus Round</span>
+              <span className="stat-value p-2">
+                Lottus N.{LottusNumber?.toString()}: {LottusName?.toString()}
+              </span>
             </h1>
 
             <div className="flex justify-center">
-              <span className="block text-1xl mb-10 w-[900px] text-center">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum.
-              </span>
+              <span className="block text-1xl mb-10 w-[900px] text-center">{LottusDesc?.toString()}</span>
             </div>
 
             <div className="stats shadow">
-              <div className="flex justify-center p-10">
-                <Countdown />
+              <div style={{ display: "flex", alignItems: "center", padding: 10 }}>
+                {isActive ? (
+                  <>
+                    <span className="loading loading-infinity loading-lg loading-lg-custom"></span>
+                    <span className="stat-value p-2">Active</span>
+                  </>
+                ) : (
+                  <span className="stat-value p-2">Ended</span>
+                )}
               </div>
+
+              {isActive ? (
+                <div className="flex justify-center p-10">
+                  <Countdown />
+                </div>
+              ) : (
+                <div className="p-5">
+                  <div className="stat-title pb-3">Lottus Winner</div>
+                  <Address address={LastWinner} />
+                </div>
+              )}
+
+              {isActive ? (
+                <div className="p-5">
+                  <div className="stat-title pb-3">Charity:</div>
+                  <Address address={Charity} />
+                </div>
+              ) : (
+                <div className="p-5">
+                  <div className="stat-title pb-3">Charity:</div>
+                  <Address address={Charity} />
+                </div>
+              )}
 
               <div className="stat">
                 <div className="stat-figure text-secondary">
@@ -65,7 +121,7 @@ const Home: NextPage = () => {
                   </svg>
                 </div>
                 <div className="stat-title">Price Per Ticket</div>
-                <div className="stat-value">0.01 ETH</div>
+                <div className="stat-value">{ethValue ? Number(BigInt(ethValue.toString())) / 1e18 : 0} ETH</div>
               </div>
               <div className="stat">
                 <div className="stat-figure text-secondary">
@@ -83,9 +139,9 @@ const Home: NextPage = () => {
                     ></path>
                   </svg>
                 </div>
-                <div className="stat-title">Total Participants</div>
-                <div className="stat-value">40</div>
-                <div className="stat-desc"></div>
+                <div className="stat-title">Tickets Sold:</div>
+                <div className="stat-value text-center">{numberOfParticipants}</div>
+                <div className="stat-desc">Total of participants: {uniqueParticipants}</div>
               </div>
               <div className="stat">
                 <div className="stat-figure text-secondary">
@@ -104,7 +160,7 @@ const Home: NextPage = () => {
                   </svg>
                 </div>
                 <div className="stat-title">Prize Pool</div>
-                <div className="stat-value">0.16 ETH*</div>
+                <div className="stat-value">{price1 ? Number(BigInt(price1.toString())) / 1e18 : 0} ETH*</div>
                 <div className="stat-desc">*40% of the total</div>
               </div>
             </div>
@@ -113,8 +169,12 @@ const Home: NextPage = () => {
               <div className="indicator">
                 <div className="indicator-item indicator-bottom"></div>
                 <div className="stat-actions flex flex-col space-y-2 px-4">
-                  <CounterComponent />
-                  <button className="btn btn-primary">Buy Tickets</button>
+                  <CounterComponent ethValue={ethValueNumber} />
+                  <div className="flex justify-center p-10">
+                    <button className="btn btn-primary" disabled={!isActive}>
+                      {isActive ? "Buy Tickets" : "This Lottus has Ended"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -193,8 +253,9 @@ const Home: NextPage = () => {
               <p>
                 Lottus is a decentralized donation platform that operates like a lottery. Each week, a new charity is
                 selected to receive 40% of the donation pool, while another 40% goes to the raffle winner. The remaining
-                20% is allocated to the development team. The winner receives a prize in cryptocurrency and a
-                commemorative NFT, while all participants receive a participation NFT.
+                20% is allocated in the following way, 10% for the dev and 10% stays in the contract for the next
+                Lottus. The winner receives a prize in cryptocurrency and a commemorative NFT, while all participants
+                receive a participation NFT.
               </p>
             </div>
           </div>

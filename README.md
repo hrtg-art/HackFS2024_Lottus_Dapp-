@@ -32,3 +32,23 @@ Entry for HackFS2024 By Heritage
 
    ![More Complex Layout For Lottus](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-17_193147892.png?alt=media&token=67670985-0450-4256-a216-958e8a1f82ae)
 
+    **Fifth Commit:** 
+  -Creation of a the Base of the smart contract: 
+      -It allows the owner to create a Lottus with the info they need like the charity to donate on this lottus, the price, name, etc.
+      -It let's the owner Pick a "random" winner, and it updates and saves the winners on an array for using it on the history.
+      -It distributes the Funds the following way: 
+          -40% to the winner of the Lottus
+          -40% to the charity Chosen
+          -10% for the owner of the contract
+          -10% stays on the Contract to keeps funds for the next Lottus
+      -It allows the owner to depostid an initial prize pool in case a Lottus Gets sponsored by another protocol or Dapp
+      **At its current state the Smart contract is not able to Produce Actual random Results, this will be implemented later, aswell as posting the banner for each Lottus and minting the NFTs**
+
+  -Started the connection of the smart contract with the front-end, For now, the Name, description, price per ticked, tickets sold, prize pool and counter are connected and change when a new Lottus is Launched. there are some components that change depending if the Lottus is Up or if it is already ended.
+
+ 
+
+  -No Smart contract has been created yet, this comes in the next Commit. 
+
+   ![More Complex Layout For Lottus](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-18_003107203.png?alt=media&token=8dd8ba8b-27cc-44de-9a32-b5d8c82b9da5)
+

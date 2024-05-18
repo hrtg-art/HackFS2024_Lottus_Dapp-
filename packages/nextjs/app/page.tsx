@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import Countdown from "~~/components/Countdown";
@@ -83,8 +84,14 @@ const Home: NextPage = () => {
           </h1>
           <div className="flex flex-col w-full">
             <div className="grid place-items-center">
-              <div className=" h-[400px] w-[1500px] card bg-base-300 rounded-box place-items-center overflow-hidden">
-                <img src={`https://ipfs.io/ipfs/${Banner}`} alt="Lottus Banner" className="w-full h-full object-fill" />
+              <div className="h-[400px] w-[1500px] card bg-base-300 rounded-box place-items-center overflow-hidden">
+                {Banner ? (
+                  <Image src={`https://ipfs.io/ipfs/${Banner}`} alt="Lottus Banner" layout="fill" objectFit="cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-gray-500">No banner available</span>
+                  </div>
+                )}
               </div>
             </div>
 

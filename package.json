@@ -40,6 +40,8 @@
   },
   "devDependencies": {
     "canvas": "^2.11.2",
+    "hardhat": "^2.22.4",
+    "hardhat-deploy": "^0.12.4",
     "husky": "~8.0.3",
     "lint-staged": "~13.2.2",
     "next": "~14.0.4",
@@ -51,7 +53,10 @@
     "node": ">=18.17.0"
   },
   "dependencies": {
+    "@0xsquid/sdk": "^2.8.0-beta.0",
+    "@0xsquid/squid-types": "^0.1.66",
     "@chainlink/contracts": "^1.1.0",
+    "@ensdomains/ens-contracts": "^1.1.4",
     "@openzeppelin/contracts": "^5.0.2",
     "ipfs-http-client": "^60.0.1",
     "text-to-image": "^5.2.0",

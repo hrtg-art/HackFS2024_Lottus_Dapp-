@@ -90,3 +90,7 @@ Entry for HackFS2024 By Heritage
  ## Next Step: 
 
  -Connecting the changes to the Front End, and start implementing Filebase as a backup for the files and registries of each lottus. 
+
+   **Eighth Commit:** 
+  -Basic changes on both smart contracts. creation of badges and level functions. 
+  -Connections to the front end. 

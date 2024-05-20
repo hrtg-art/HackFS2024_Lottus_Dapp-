@@ -6,140 +6,113 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+interface ILottusLottery {
+    function getParticipants() external view returns (address[] memory);
+    function getWinner() external view returns (address);
+    function isLotteryActive() external view returns (bool);
+    function currentLotteryId() external view returns (uint256);
+}
+
 contract LottusNFT is Ownable, ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
+    ILottusLottery public lotteryContract;
+    mapping(address => mapping(uint256 => bool)) public hasClaimedNFT;
+    bool public winnerNFTMinted;
 
-    string public participantNFTCID;
-    string public winnerNFTCID;
+    string public winnerMetadataCID;
+    string public participantMetadataCID;
 
-    constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
-
-    function setParticipantNFTCID(string memory cid) external onlyOwner {
-        participantNFTCID = cid;
+    constructor(
+        string memory name, 
+        string memory symbol, 
+        address lotteryContractAddress, 
+        string memory initialWinnerCID, 
+        string memory initialParticipantCID
+    ) ERC721(name, symbol) {
+        lotteryContract = ILottusLottery(lotteryContractAddress);
+        winnerMetadataCID = initialWinnerCID;
+        participantMetadataCID = initialParticipantCID;
     }
 
-    function setWinnerNFTCID(string memory cid) external onlyOwner {
-        winnerNFTCID = cid;
+    function updateWinnerMetadataCID(string memory newCID) external onlyOwner {
+        winnerMetadataCID = newCID;
     }
 
-    function mintWinnerNFT(address winner, string memory lotteryName, uint256 prizeAmount, address charity) external onlyOwner {
+    function updateParticipantMetadataCID(string memory newCID) external onlyOwner {
+        participantMetadataCID = newCID;
+    }
+
+    function mintWinnerNFT() external onlyOwner {
+        require(!lotteryContract.isLotteryActive(), "Lottery still active");
+        address winner = lotteryContract.getWinner();
+        require(winner != address(0), "No winner selected");
+        require(!winnerNFTMinted, "Winner NFT already minted");
+
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
-        _mint(winner, newItemId);
-        _setTokenURI(newItemId, generateTokenURI(winnerNFTCID, winner, "Winner", lotteryName, prizeAmount, charity));
+        _safeMint(winner, newItemId);
+        _setTokenURI(newItemId, string(abi.encodePacked("ipfs://", winnerMetadataCID)));
+        winnerNFTMinted = true;
     }
 
-    function claimParticipantNFT(address participant, string memory lotteryName, uint256 prizeAmount, address charity) external onlyOwner {
+    function claimParticipantNFT() external {
+        require(!lotteryContract.isLotteryActive(), "Lottery still active");
+        uint256 lotteryId = lotteryContract.currentLotteryId();
+        require(!hasClaimedNFT[msg.sender][lotteryId], "NFT already claimed for this lottery");
+
+        address[] memory participants = lotteryContract.getParticipants();
+        bool isParticipant = false;
+
+        for (uint256 i = 0; i < participants.length; i++) {
+            if (participants[i] == msg.sender) {
+                isParticipant = true;
+                break;
+            }
+        }
+
+        require(isParticipant, "You did not participate in this lottery");
+
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
-        _mint(participant, newItemId);
-        _setTokenURI(newItemId, generateTokenURI(participantNFTCID, participant, "Participant", lotteryName, prizeAmount, charity));
+        _safeMint(msg.sender, newItemId);
+        _setTokenURI(newItemId, string(abi.encodePacked("ipfs://", participantMetadataCID)));
+
+        hasClaimedNFT[msg.sender][lotteryId] = true;
     }
 
-    function generateTokenURI(string memory cid, address user, string memory role, string memory lotteryName, uint256 prizeAmount, address charity) internal view returns (string memory) {
-        string memory walletOrENS = toAsciiString(user);
-        string memory metadata = string(abi.encodePacked(
-            '{"name":"', role, ' NFT",',
-            '"description":"This NFT certifies the holder as a ', role, ' in the Lottus Lottery.",',
-            '"image":"ipfs://', cid, '",',
-            '"attributes":', generateAttributes(walletOrENS, role, lotteryName, prizeAmount, charity),
-            '}'
-        ));
-        return string(abi.encodePacked("data:application/json;base64,", base64Encode(bytes(metadata))));
-    }
+    function getClaimedParticipants(uint256 lotteryId) external view returns (address[] memory) {
+        address[] memory participants = lotteryContract.getParticipants();
+        uint256 count = 0;
 
-    function generateAttributes(string memory walletOrENS, string memory role, string memory lotteryName, uint256 prizeAmount, address charity) internal pure returns (string memory) {
-        return string(abi.encodePacked(
-            '[',
-            '{"trait_type":"Role","value":"', role, '"},',
-            '{"trait_type":"ENS/Address","value":"', walletOrENS, '"},',
-            '{"trait_type":"Prize Pool","value":"', uint2str(prizeAmount), '"},',
-            '{"trait_type":"Lottus Name","value":"', lotteryName, '"},',
-            '{"trait_type":"Charity","value":"', toAsciiString(charity), '"}',
-            ']'
-        ));
-    }
-
-    function toAsciiString(address x) internal pure returns (string memory) {
-        bytes memory s = new bytes(40);
-        for (uint i = 0; i < 20; i++) {
-            bytes1 b = bytes1(uint8(uint(uint160(x)) / (2**(8*(19 - i)))));
-            bytes1 hi = bytes1(uint8(b) / 16);
-            bytes1 lo = bytes1(uint8(b) - 16 * uint8(hi));
-            s[2*i] = char(hi);
-            s[2*i+1] = char(lo);            
-        }
-        return string(s);
-    }
-
-    function char(bytes1 b) internal pure returns (bytes1 c) {
-        if (uint8(b) < 10) return bytes1(uint8(b) + 0x30);
-        else return bytes1(uint8(b) + 0x57);
-    }
-
-    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
-        if (_i == 0) {
-            return "0";
-        }
-        uint j = _i;
-        uint len;
-        while (j != 0) {
-            len++;
-            j /= 10;
-        }
-        bytes memory bstr = new bytes(len);
-        uint k = len;
-        while (_i != 0) {
-            k = k - 1;
-            uint8 temp = (48 + uint8(_i - _i / 10 * 10));
-            bytes1 b1 = bytes1(temp);
-            bstr[k] = b1;
-            _i /= 10;
-        }
-        return string(bstr);
-    }
-
-    function base64Encode(bytes memory data) internal pure returns (string memory) {
-        string memory table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        bytes memory tableBytes = bytes(table);
-
-        uint256 encodedLen = 4 * ((data.length + 2) / 3);
-        bytes memory result = new bytes(encodedLen + 32);
-
-        assembly {
-            let tablePtr := add(tableBytes, 1)
-            let resultPtr := add(result, 32)
-
-            for {
-                let i := 0
-            } lt(i, mload(data)) {
-
-            } {
-                data := add(data, 3)
-                let input := mload(data)
-
-                mstore8(resultPtr, mload(add(tablePtr, and(shr(18, input), 0x3F))))
-                resultPtr := add(resultPtr, 1)
-                mstore8(resultPtr, mload(add(tablePtr, and(shr(12, input), 0x3F))))
-                resultPtr := add(resultPtr, 1)
-                mstore8(resultPtr, mload(add(tablePtr, and(shr(6, input), 0x3F))))
-                resultPtr := add(resultPtr, 1)
-                mstore8(resultPtr, mload(add(tablePtr, and(input, 0x3F))))
-                resultPtr := add(resultPtr, 1)
+        for (uint256 i = 0; i < participants.length; i++) {
+            if (hasClaimedNFT[participants[i]][lotteryId]) {
+                count++;
             }
-
-            switch mod(mload(data), 3)
-            case 1 {
-                mstore(sub(resultPtr, 2), shl(240, 0x3d3d))
-            }
-            case 2 {
-                mstore(sub(resultPtr, 1), shl(248, 0x3d))
-            }
-
-            mstore(result, encodedLen)
         }
 
-        return string(result);
+        address[] memory claimedParticipants = new address[](count);
+        uint256 index = 0;
+
+        for (uint256 i = 0; i < participants.length; i++) {
+            if (hasClaimedNFT[participants[i]][lotteryId]) {
+                claimedParticipants[index] = participants[i];
+                index++;
+            }
+        }
+
+        return claimedParticipants;
+    }
+
+    function resetClaimedParticipants(uint256 lotteryId) external onlyOwner {
+        require(winnerNFTMinted, "Winner NFT not minted yet");
+
+        address[] memory participants = lotteryContract.getParticipants();
+
+        for (uint256 i = 0; i < participants.length; i++) {
+            hasClaimedNFT[participants[i]][lotteryId] = false;
+        }
+
+        winnerNFTMinted = false;
     }
 }

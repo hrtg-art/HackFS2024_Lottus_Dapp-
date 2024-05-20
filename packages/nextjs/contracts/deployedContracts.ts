@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     LottusLottery: {
-      address: "0x51A1ceB83B83F1985a81C295d1fF28Afef186E02",
+      address: "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf",
       abi: [
         {
           inputs: [
@@ -16,14 +16,28 @@ const deployedContracts = {
               name: "ownerAddress",
               type: "address",
             },
-            {
-              internalType: "address",
-              name: "nftContractAddress",
-              type: "address",
-            },
           ],
           stateMutability: "nonpayable",
           type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "badge",
+              type: "string",
+            },
+          ],
+          name: "BadgeAwarded",
+          type: "event",
         },
         {
           anonymous: false,
@@ -217,6 +231,16 @@ const deployedContracts = {
               type: "string",
             },
             {
+              internalType: "string",
+              name: "winnerNFTCID",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "participantNFTCID",
+              type: "string",
+            },
+            {
               internalType: "uint256",
               name: "ticketPrice",
               type: "uint256",
@@ -254,6 +278,16 @@ const deployedContracts = {
             {
               internalType: "string",
               name: "bannerCID",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "winnerNFTCID",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "participantNFTCID",
               type: "string",
             },
             {
@@ -401,6 +435,19 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "getParticipantNFTCID",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "getParticipants",
           outputs: [
             {
@@ -426,6 +473,44 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+          ],
+          name: "getUserBadges",
+          outputs: [
+            {
+              internalType: "string[]",
+              name: "",
+              type: "string[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+          ],
+          name: "getUserLevel",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [],
           name: "getWinner",
           outputs: [
@@ -433,6 +518,19 @@ const deployedContracts = {
               internalType: "address",
               name: "",
               type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getWinnerNFTCID",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
             },
           ],
           stateMutability: "view",
@@ -469,6 +567,43 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "badge",
+              type: "string",
+            },
+          ],
+          name: "hasBadge",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "isLotteryActive",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [],
           name: "lastCharityAmount",
           outputs: [
@@ -489,19 +624,6 @@ const deployedContracts = {
               internalType: "uint256",
               name: "",
               type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "nftContract",
-          outputs: [
-            {
-              internalType: "contract LottusNFT",
-              name: "",
-              type: "address",
             },
           ],
           stateMutability: "view",
@@ -540,21 +662,27 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "renounceOwnership",
-          outputs: [],
-          stateMutability: "nonpayable",
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "participantsMap",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "string",
-              name: "description",
-              type: "string",
-            },
-          ],
-          name: "setDescription",
+          inputs: [],
+          name: "renounceOwnership",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -583,6 +711,40 @@ const deployedContracts = {
           name: "updateBannerCID",
           outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "users",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "level",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "participationCount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalDonations",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalSpent",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -618,7 +780,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     LottusNFT: {
-      address: "0xDC11f7E700A4c898AE5CAddB1082cFfa76512aDD",
+      address: "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
       abi: [
         {
           inputs: [
@@ -630,6 +792,21 @@ const deployedContracts = {
             {
               internalType: "string",
               name: "symbol",
+              type: "string",
+            },
+            {
+              internalType: "address",
+              name: "lotteryContractAddress",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "initialWinnerCID",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "initialParticipantCID",
               type: "string",
             },
           ],
@@ -768,28 +945,7 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "address",
-              name: "participant",
-              type: "address",
-            },
-            {
-              internalType: "string",
-              name: "lotteryName",
-              type: "string",
-            },
-            {
-              internalType: "uint256",
-              name: "prizeAmount",
-              type: "uint256",
-            },
-            {
-              internalType: "address",
-              name: "charity",
-              type: "address",
-            },
-          ],
+          inputs: [],
           name: "claimParticipantNFT",
           outputs: [],
           stateMutability: "nonpayable",
@@ -809,6 +965,49 @@ const deployedContracts = {
               internalType: "address",
               name: "",
               type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "lotteryId",
+              type: "uint256",
+            },
+          ],
+          name: "getClaimedParticipants",
+          outputs: [
+            {
+              internalType: "address[]",
+              name: "",
+              type: "address[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "hasClaimedNFT",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
             },
           ],
           stateMutability: "view",
@@ -839,28 +1038,20 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
+          inputs: [],
+          name: "lotteryContract",
+          outputs: [
             {
-              internalType: "address",
-              name: "winner",
-              type: "address",
-            },
-            {
-              internalType: "string",
-              name: "lotteryName",
-              type: "string",
-            },
-            {
-              internalType: "uint256",
-              name: "prizeAmount",
-              type: "uint256",
-            },
-            {
-              internalType: "address",
-              name: "charity",
+              internalType: "contract ILottusLottery",
+              name: "",
               type: "address",
             },
           ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "mintWinnerNFT",
           outputs: [],
           stateMutability: "nonpayable",
@@ -913,7 +1104,7 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "participantNFTCID",
+          name: "participantMetadataCID",
           outputs: [
             {
               internalType: "string",
@@ -927,6 +1118,19 @@ const deployedContracts = {
         {
           inputs: [],
           name: "renounceOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "lotteryId",
+              type: "uint256",
+            },
+          ],
+          name: "resetClaimedParticipants",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -996,32 +1200,6 @@ const deployedContracts = {
             },
           ],
           name: "setApprovalForAll",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "string",
-              name: "cid",
-              type: "string",
-            },
-          ],
-          name: "setParticipantNFTCID",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "string",
-              name: "cid",
-              type: "string",
-            },
-          ],
-          name: "setWinnerNFTCID",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -1114,13 +1292,52 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "string",
+              name: "newCID",
+              type: "string",
+            },
+          ],
+          name: "updateParticipantMetadataCID",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "newCID",
+              type: "string",
+            },
+          ],
+          name: "updateWinnerMetadataCID",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
           inputs: [],
-          name: "winnerNFTCID",
+          name: "winnerMetadataCID",
           outputs: [
             {
               internalType: "string",
               name: "",
               type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "winnerNFTMinted",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
             },
           ],
           stateMutability: "view",
@@ -1144,149 +1361,6 @@ const deployedContracts = {
         tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
         transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
       },
-    },
-    YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      abi: [
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_owner",
-              type: "address",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "constructor",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "greetingSetter",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "newGreeting",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "premium",
-              type: "bool",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "value",
-              type: "uint256",
-            },
-          ],
-          name: "GreetingChange",
-          type: "event",
-        },
-        {
-          inputs: [],
-          name: "greeting",
-          outputs: [
-            {
-              internalType: "string",
-              name: "",
-              type: "string",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "owner",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "premium",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "string",
-              name: "_newGreeting",
-              type: "string",
-            },
-          ],
-          name: "setGreeting",
-          outputs: [],
-          stateMutability: "payable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "totalCounter",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "userGreetingCounter",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "withdraw",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          stateMutability: "payable",
-          type: "receive",
-        },
-      ],
-      inheritedFunctions: {},
     },
   },
 } as const;

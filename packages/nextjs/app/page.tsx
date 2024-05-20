@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import type { NextPage } from "next";
+import { NextPage } from "next";
 import { useAccount } from "wagmi";
 import Countdown from "~~/components/Countdown";
 import CounterComponent from "~~/components/CounterComponent";
+import UserBadges from "~~/components/UserBadges";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
@@ -34,13 +35,23 @@ const Home: NextPage = () => {
     functionName: "getWinner",
   });
 
+  // Read user level and badges
+
+  const { data: userBadges } = useScaffoldReadContract({
+    contractName: "LottusLottery",
+    functionName: "getUserBadges",
+    args: [connectedAddress],
+  });
+
   const [, , , Banner] = CurrentLottus || [];
-  const [, , , , ethValue] = CurrentLottus || [];
+  const [, , , , Winner] = CurrentLottus || [];
+  const [, , , , , Participant] = CurrentLottus || [];
+  const [, , , , , , ethValue] = CurrentLottus || [];
   const [, LottusName, ,] = CurrentLottus || [];
   const [LottusNumber, , ,] = CurrentLottus || [];
   const [, , LottusDesc] = CurrentLottus || [];
-  const [, , , , , Charity] = CurrentLottus || [];
-  const isActive = CurrentLottus ? CurrentLottus[8] : false;
+  const [, , , , , , , Charity] = CurrentLottus || [];
+  const isActive = CurrentLottus ? CurrentLottus[10] : false;
 
   const ethValueNumber = ethValue ? Number(BigInt(ethValue.toString())) : 0;
 
@@ -170,6 +181,8 @@ const Home: NextPage = () => {
                   )}
                 </div>
               </div>
+
+              <UserBadges badges={userBadges || []} />
             </div>
 
             <div className="divider divider-success pt-10"></div>
@@ -339,14 +352,37 @@ const Home: NextPage = () => {
           </div>
 
           {/* Columna 3: NFT Awards & Certificates */}
-          <div className="p-5 bg-base-300 shadow-lg rounded-box w-[500px]">
+          <div className="p-5 bg-base-300 shadow-lg rounded-box">
             <h2 className="stat-value p-1 text-center">NFT Awards & Certificates</h2>
-            <div className="flex justify-center mt-3 space-x-2">
-              <div className="w-32 h-32 bg-gray-300 flex items-center justify-center">
-                <span className="text-center text-gray-600">Winner NFT</span>
+            <div className="flex justify-center mt-3 space-x-10">
+              <div className="text-center">
+                <h3 className="text-lg font-bold mb-2">Winner NFT</h3>
+                <div className="w-40 h-40 bg-gray-300 flex items-center justify-center overflow-hidden rounded-box relative">
+                  {Winner ? (
+                    <Image src={`https://ipfs.io/ipfs/${Winner}`} alt="Winner NFT" layout="fill" objectFit="cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-gray-500">No Winner NFT available</span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="w-32 h-32 bg-gray-300 flex items-center justify-center">
-                <span className="text-center text-gray-600">Participant NFT</span>
+              <div className="text-center">
+                <h3 className="text-lg font-bold mb-2">Participant NFT</h3>
+                <div className="w-40 h-40 bg-gray-300 flex items-center justify-center overflow-hidden rounded-box relative">
+                  {Participant ? (
+                    <Image
+                      src={`https://ipfs.io/ipfs/${Participant}`}
+                      alt="Participant NFT"
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-gray-500">No Participant NFT available</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <p className="mt-3 text-center">

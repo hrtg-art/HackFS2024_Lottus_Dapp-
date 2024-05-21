@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { NextPage } from "next";
 import { useAccount } from "wagmi";
+import Example from "~~/components/Banner";
 import Countdown from "~~/components/Countdown";
 import CounterComponent from "~~/components/CounterComponent";
 import UserBadges from "~~/components/UserBadges";
@@ -18,6 +19,16 @@ const Home: NextPage = () => {
   const { data: price1 } = useScaffoldReadContract({
     contractName: "LottusLottery",
     functionName: "getPrizePool",
+  });
+
+  const { data: winnerRecords } = useScaffoldReadContract({
+    contractName: "LottusLottery",
+    functionName: "getWinnerRecords",
+  });
+
+  const { data: CharityRecords } = useScaffoldReadContract({
+    contractName: "LottusLottery",
+    functionName: "getCharityRecords",
   });
 
   const { data: PrizeAmount } = useScaffoldReadContract({
@@ -84,18 +95,17 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-20">
+      <Example />
+      <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-8xl font-bold">Lottus</span>
-            <span className="block text-1xl mb-4">
-              The Help 2 Earn System Where you can get rewarded by being a good soul...
-            </span>
+          <h1 className="text-center ">
+            <div className="flex justify-center items-center h-[240px] w-[600px] mx-auto card rounded-box overflow-hidden ">
+              <Image alt="SE2 logo" className="cursor-pointer object-cover" fill src="/LottusBanner.png" />
+            </div>
           </h1>
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full p-10">
             <div className="grid place-items-center">
-              <div className="h-[400px] w-[1500px] card bg-base-300 rounded-box place-items-center overflow-hidden">
+              <div className="h-[600px] w-[1600px] card bg-base-300 rounded-box place-items-center overflow-hidden">
                 {Banner ? (
                   <Image src={`https://ipfs.io/ipfs/${Banner}`} alt="Lottus Banner" layout="fill" objectFit="cover" />
                 ) : (
@@ -107,82 +117,13 @@ const Home: NextPage = () => {
             </div>
 
             <h1 className="text-center p-5">
-              <span className="stat-value p-2">
+              <span className="stat-value p-2 text-7xl">
                 Lottus N.{LottusNumber?.toString()}: {LottusName?.toString()}
               </span>
             </h1>
 
             <div className="flex justify-center">
-              <span className="block text-1xl mb-10 w-[900px] text-center">{LottusDesc?.toString()}</span>
-            </div>
-
-            <div className="flex flex-col items-center pt-5 pb-10 space-y-10">
-              <div className="flex justify-center items-center pt-5 pb-10 space-x-32">
-                {/* Columna 1 */}
-                <div className="flex-2">
-                  <div className="indicator">
-                    <div className="indicator-item indicator-bottom"></div>
-                    <div className="stat-actions flex flex-col space-y-2 px-4">
-                      <CounterComponent ethValue={ethValueNumber / 1e18} onQuantityChange={setQuantity} />
-                      <div className="flex justify-center p-5">
-                        <button className="btn btn-primary" onClick={handleBuyTickets} disabled={!isActive}>
-                          {isActive ? "Buy Tickets" : "This Lottus has Ended"}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Columna 2 */}
-                <div className="flex-1">
-                  {isActive ? (
-                    <div className="p-5">
-                      <div className="stat-value p-2 text-center">You Have:</div>
-                      <span className="block text-8xl font-bold text-center">{ticketsOwned}</span>
-                      <div className="stat-value p-2 text-center">Tickets For This Lottus</div>
-                    </div>
-                  ) : (
-                    <div className="p-5 text-center">
-                      {ticketsOwned > 0 ? (
-                        connectedAddress === LastWinner ? (
-                          <div>
-                            <div className="stat-value p-2">Congratulations!</div>
-                            <div className="text-xl">You were the winner of this Lottus.</div>
-                            <div className="text-xl">Not only that, you helped a charity receive:</div>
-                            <div className="stat-value pt-3 pb-5">
-                              {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH
-                            </div>
-                            <div className="text-xl">Check your wallet for the Winner NFT for being</div>
-                            <div className="text-xl">A good soul with good luck</div>
-                          </div>
-                        ) : (
-                          <div>
-                            <div className="stat-value p-2">You are still a hero!,</div>
-                            <div className="text-xl">Sadly you did not win this time</div>
-                            <div className="text-xl">but you still helped a charity receive:</div>
-                            <div className="stat-value pt-3 pb-5">
-                              {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH
-                            </div>
-                            <button className="btn btn-primary px-10">Claim The proof that you are a good soul</button>
-                          </div>
-                        )
-                      ) : (
-                        <div>
-                          <div className="stat-value p-2">This Lottus has ended.</div>
-                          <div className="text-xl">We raised:</div>
-                          <div className="stat-value pt-3 pb-5">
-                            {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH for charity
-                          </div>
-                          <div className="text-xl">But do not worry</div>
-                          <div className="text-xl">A new Lottus will be launching soon, do not miss it!</div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <UserBadges badges={userBadges || []} />
+              <span className="block text-2xl mb-10 w-[1300px] text-center">{LottusDesc?.toString()}</span>
             </div>
 
             <div className="divider divider-success pt-10"></div>
@@ -284,59 +225,140 @@ const Home: NextPage = () => {
             </div>
 
             <div className="divider divider-success"></div>
+
+            <div className="flex flex-col items-center pt-5 pb-10 space-y-10">
+              <div className="flex justify-center items-center pt-5 pb-10 space-x-32">
+                {/* Columna 1 */}
+                <div className="flex-2">
+                  <div className="indicator">
+                    <div className="indicator-item indicator-bottom"></div>
+                    <div className="stat-actions flex flex-col space-y-2 px-4">
+                      <CounterComponent ethValue={ethValueNumber / 1e18} onQuantityChange={setQuantity} />
+                      <div className="flex justify-center p-5">
+                        <button className="btn btn-primary" onClick={handleBuyTickets} disabled={!isActive}>
+                          {isActive ? "Buy Tickets" : "This Lottus has Ended"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Columna 2 */}
+                <div className="flex-1">
+                  {isActive ? (
+                    <div className="p-5">
+                      <div className="stat-value p-2 text-center">You Have:</div>
+                      <span className="block text-8xl font-bold text-center">{ticketsOwned}</span>
+                      <div className="stat-value p-2 text-center">Tickets For This Lottus</div>
+                    </div>
+                  ) : (
+                    <div className="p-5 text-center">
+                      {ticketsOwned > 0 ? (
+                        connectedAddress === LastWinner ? (
+                          <div>
+                            <div className="stat-value p-2">Congratulations!</div>
+                            <div className="text-xl">You were the winner of this Lottus.</div>
+                            <div className="text-xl">Not only that, you helped a charity receive:</div>
+                            <div className="stat-value pt-3 pb-5">
+                              {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH
+                            </div>
+                            <div className="text-xl">Check your wallet for the Winner NFT for being</div>
+                            <div className="text-xl">A good soul with good luck</div>
+                          </div>
+                        ) : (
+                          <div>
+                            <div className="stat-value p-2">You are still a hero!,</div>
+                            <div className="text-xl">Sadly you did not win this time</div>
+                            <div className="text-xl">but you still helped a charity receive:</div>
+                            <div className="stat-value pt-3 pb-5">
+                              {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH
+                            </div>
+                            <button className="btn btn-primary px-10">Claim The proof that you are a good soul</button>
+                          </div>
+                        )
+                      ) : (
+                        <div>
+                          <div className="stat-value p-2">This Lottus has ended.</div>
+                          <div className="text-xl">We raised:</div>
+                          <div className="stat-value pt-3 pb-5">
+                            {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH for charity
+                          </div>
+                          <div className="text-xl">But do not worry</div>
+                          <div className="text-xl">A new Lottus will be launching soon, do not miss it!</div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <UserBadges badges={userBadges || []} />
+            </div>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto p-5 pt-32">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="divider divider-success pt-10"></div>
+        <h1 className="text-center p-5">
+          <span className="stat-value p-20 text-6xl">More info:</span>
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-10">
           {/* Columna 1: Ganadores Recientes y Donaciones Recientes */}
           <div className="overflow-x-auto p-5 bg-base-300 shadow-lg rounded-box">
-            <table className="table w-full">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Recent Winners</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>1</th>
-                  <td>Ganador 1</td>
-                </tr>
-                <tr>
-                  <th>2</th>
-                  <td>Ganador 2</td>
-                </tr>
-                <tr>
-                  <th>3</th>
-                  <td>Ganador 3</td>
-                </tr>
-              </tbody>
-            </table>
+            <h2 className="stat-value p-1 text-center">Check recent Events</h2>
 
-            <table className="table w-full mt-5">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Recent Donations</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>1</th>
-                  <td>Donación 1</td>
-                </tr>
-                <tr>
-                  <th>2</th>
-                  <td>Donación 2</td>
-                </tr>
-                <tr>
-                  <th>3</th>
-                  <td>Donación 3</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="max-h-40 overflow-y-auto mb-5">
+              <h3 className="text-center">Winners Record</h3>
+              <table className="table w-full">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Winner</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {winnerRecords?.map((record, index) => (
+                    <tr key={index}>
+                      <th>{index + 1}</th>
+                      <td>
+                        <Address address={record.winner} />
+                      </td>
+                      <td>{Number(record.amount) / 1e18} ETH</td>
+                      <td>{new Date(Number(record.timestamp) * 1000).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="max-h-40 overflow-y-auto">
+              <h3 className="text-center">Charities Record</h3>
+              <table className="table w-full">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Charity</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {CharityRecords?.map((record, index) => (
+                    <tr key={index}>
+                      <th>{index + 1}</th>
+                      <td>
+                        <Address address={record.charity} />
+                      </td>
+                      <td>{Number(record.amount) / 1e18} ETH</td>
+                      <td>{new Date(Number(record.timestamp) * 1000).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Columna 2: Suggest the Next Charity */}
@@ -392,14 +414,196 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      <h1 className="text-center pt-20">
-        <span className="stat-value p-2">F.A.Q</span>
+      <style jsx>{`
+        .timeline {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        .timeline svg {
+          width: 12px;
+          height: 12px;
+        }
+        .timeline hr {
+          height: 4px;
+        }
+        .active-step {
+          background-color: #4caf50; /* Active step background color */
+          color: white; /* Active step text color */
+        }
+        .tooltip {
+          position: relative;
+          display: inline-block;
+        }
+        .tooltip .tooltiptext {
+          visibility: hidden;
+          width: 220px;
+          background-color: black;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px;
+          position: absolute;
+          z-index: 1;
+          bottom: 125%; /* Position the tooltip above the text */
+          left: 50%;
+          margin-left: -110px; /* Center the tooltip */
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+        .tooltip .tooltiptext::after {
+          content: "";
+          position: absolute;
+          top: 100%; /* At the bottom of the tooltip */
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: black transparent transparent transparent;
+        }
+        .tooltip:hover .tooltiptext {
+          visibility: visible;
+          opacity: 1;
+        }
+      `}</style>
+
+      <h1 className="text-center">
+        <span className="stat-value p-20 text-6xl">RoadMap:</span>
+      </h1>
+
+      <ul className="timeline justify-center pt-20 pb-20">
+        <li>
+          <div className="timeline-start timeline-box active-step tooltip">
+            Beta Launch
+            <span className="tooltiptext">
+              The official launch of the Lottus beta version. Join us to test and experience the platform features.
+            </span>
+          </div>
+          <div className="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-8 h-8 text-primary"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div className="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-8 h-8 text-primary"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="timeline-end timeline-box tooltip">
+            Generate Yields During Lottus
+            <span className="tooltiptext">
+              Enhancing integration with yield-generating protocols to maximize the impact of your contributions.
+            </span>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div className="timeline-start timeline-box tooltip">
+            Lottus Automation
+            <span className="tooltiptext">
+              Implementing automation for the Lottus process to ensure transparency and efficiency.
+            </span>
+          </div>
+          <div className="timeline-middle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8">
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div className="timeline-middle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8">
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="timeline-end timeline-box tooltip">
+            Creation of MiniLottus
+            <span className="tooltiptext">
+              Introducing MiniLottus, community-driven lotteries to support specific causes.
+            </span>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div className="timeline-start timeline-box tooltip">
+            Creation of DAO
+            <span className="tooltiptext">
+              Establishing a Decentralized Autonomous Organization (DAO) for community decision-making.
+            </span>
+          </div>
+          <div className="timeline-middle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8">
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+        </li>
+        <li>
+          <hr />
+          <div className="timeline-middle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8">
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="timeline-end timeline-box tooltip">
+            Lottus Token?
+            <span className="tooltiptext">
+              Stay tuned for a potential Lottus token launch, bringing new opportunities for participation and
+              governance.
+            </span>
+          </div>
+          <hr />
+        </li>
+      </ul>
+
+      <h1 className="text-center p-5 pt-20">
+        <span className="stat-value p-20 text-6xl">F.A.Q:</span>
       </h1>
       <div className="flex items-center flex-col flex-grow pt-5">
         <div className="w-[1500px] px-5 space-y-4">
-          <div className="collapse bg-base-200 w-full">
-            <input type="checkbox" className="peer" />
-            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+          <div className="collapse collapse-arrow bg-base-200">
+            <input type="radio" name="my-accordion-2" defaultChecked />
+            <div className="collapse-title text-xl font-medium bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
               What is Lottus and how does it work?
             </div>
             <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
@@ -413,9 +617,9 @@ const Home: NextPage = () => {
             </div>
           </div>
 
-          <div className="collapse bg-base-200 w-full">
-            <input type="checkbox" className="peer" />
-            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+          <div className="collapse collapse-arrow bg-base-200">
+            <input type="radio" name="my-accordion-2" />
+            <div className="collapse-title text-xl font-medium bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
               How can I participate in a Lottus lottery?
             </div>
             <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
@@ -429,9 +633,9 @@ const Home: NextPage = () => {
             </div>
           </div>
 
-          <div className="collapse bg-base-200 w-full">
-            <input type="checkbox" className="peer" />
-            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+          <div className="collapse collapse-arrow bg-base-200">
+            <input type="radio" name="my-accordion-2" />
+            <div className="collapse-title text-xl font-medium bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
               How is the raffle winner selected and how is fairness ensured?
             </div>
             <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
@@ -443,9 +647,9 @@ const Home: NextPage = () => {
             </div>
           </div>
 
-          <div className="collapse bg-base-200 w-full">
-            <input type="checkbox" className="peer" />
-            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+          <div className="collapse collapse-arrow bg-base-200">
+            <input type="radio" name="my-accordion-2" />
+            <div className="collapse-title text-xl font-medium bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
               What are the NFTs?
             </div>
             <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
@@ -458,7 +662,20 @@ const Home: NextPage = () => {
             </div>
           </div>
 
-          {/* Add more collapse items as needed */}
+          <div className="collapse collapse-arrow bg-base-200">
+            <input type="radio" name="my-accordion-2" />
+            <div className="collapse-title text-xl font-medium bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content stat-value p-5">
+              Is there going to be a Lottus token?
+            </div>
+            <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
+              <p>
+                We are planning to launch a Lottus token in the future. This token will enable us to become a DAO
+                (Decentralized Autonomous Organization), providing users with voting power to choose the next charity.
+                However, our current focus is on more pressing plans, such as automating the Lottus process and creating
+                multiple Lottuses, not just the main one. Stay tuned for more updates!
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </>

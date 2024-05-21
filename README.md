@@ -94,3 +94,12 @@ Entry for HackFS2024 By Heritage
    **Eighth Commit:** 
   -Basic changes on both smart contracts. creation of badges and level functions. 
   -Connections to the front end. 
+
+
+   **Nineth Commit:** 
+  -Improvement on connecting the front end to the smart contract. 
+  -Added a banner that works as an incentive for people to participate.
+  -Added a roadmap to share the plans of the project.
+  -Changed some components to improve style. 
+
+  

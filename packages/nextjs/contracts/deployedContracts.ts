@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     LottusLottery: {
-      address: "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf",
+      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
       abi: [
         {
           inputs: [
@@ -780,7 +780,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     LottusNFT: {
-      address: "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
+      address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
       abi: [
         {
           inputs: [

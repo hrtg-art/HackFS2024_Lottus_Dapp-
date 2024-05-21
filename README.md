@@ -103,3 +103,4 @@ Entry for HackFS2024 By Heritage
   -Changed some components to improve style. 
 
   
+   ![Lottus With info](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Ffsfsf.png?alt=media&token=bd0f9345-0233-488b-b8f2-66ff744d3f70)

@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import Example from "~~/components/Banner";
 import Countdown from "~~/components/Countdown";
 import CounterComponent from "~~/components/CounterComponent";
+import PostLottusRoom from "~~/components/PostLottusVoiceRoom";
 import UserBadges from "~~/components/UserBadges";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
@@ -96,6 +97,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Example />
+
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
           <h1 className="text-center ">
@@ -291,6 +293,14 @@ const Home: NextPage = () => {
                   )}
                 </div>
               </div>
+
+              {/* Mostrar PostLottusRoom solo cuando el Lottus haya terminado */}
+              {!isActive && (
+                <div className="flex-2">
+                  <div className="stat-value p-10 text-center">Join our Post-Lottus Space to talk with the charity</div>
+                  <PostLottusRoom roomUrl="https://app.huddle01.com/scw-exwz-ett" />
+                </div>
+              )}
 
               <UserBadges badges={userBadges || []} />
             </div>

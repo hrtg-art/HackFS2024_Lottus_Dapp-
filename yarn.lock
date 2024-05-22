@@ -1576,6 +1576,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@huddle01/iframe@npm:^0.0.14":
+  version: 0.0.14
+  resolution: "@huddle01/iframe@npm:0.0.14"
+  dependencies:
+    zod: 3.22.4
+  peerDependencies:
+    react: ^18.2.0
+  checksum: 7b184b3b8b26148f1c0581bf2cac58abbcce062a29e0757539cd06b94bdb089c91a48cf0dd654aead08c282a951b3eeab83e157b89d4923c5fd69ceff86c3bf1
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.10.5":
   version: 0.10.7
   resolution: "@humanwhocodes/config-array@npm:0.10.7"
@@ -14919,6 +14930,7 @@ __metadata:
     "@0xsquid/squid-types": ^0.1.66
     "@chainlink/contracts": ^1.1.0
     "@ensdomains/ens-contracts": ^1.1.4
+    "@huddle01/iframe": ^0.0.14
     "@openzeppelin/contracts": ^5.0.2
     canvas: ^2.11.2
     hardhat: ^2.22.4
@@ -17826,6 +17838,13 @@ __metadata:
   peerDependencies:
     ethers: ^5.7.0
   checksum: f702a3437f48a8d42c4bb35b8dd13671a168aadfc4e23ce723d62959220ccb6bf9c529c60331fe5b91afaa622147c6a37490551474fe3e35c06ac476524b5160
+  languageName: node
+  linkType: hard
+
+"zod@npm:3.22.4":
+  version: 3.22.4
+  resolution: "zod@npm:3.22.4"
+  checksum: 80bfd7f8039b24fddeb0718a2ec7c02aa9856e4838d6aa4864335a047b6b37a3273b191ef335bf0b2002e5c514ef261ffcda5a589fb084a48c336ffc4cdbab7f
   languageName: node
   linkType: hard
 

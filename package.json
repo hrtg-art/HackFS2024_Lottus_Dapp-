@@ -57,6 +57,7 @@
     "@0xsquid/squid-types": "^0.1.66",
     "@chainlink/contracts": "^1.1.0",
     "@ensdomains/ens-contracts": "^1.1.4",
+    "@huddle01/iframe": "^0.0.14",
     "@openzeppelin/contracts": "^5.0.2",
     "ipfs-http-client": "^60.0.1",
     "text-to-image": "^5.2.0",

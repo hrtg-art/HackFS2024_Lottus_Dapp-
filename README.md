@@ -119,4 +119,7 @@ Entry for HackFS2024 By Heritage
   
    ![Lottus With info](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-22_214601098.png?alt=media&token=952c0d89-34e6-44ba-b725-8663c602dd7a)
 
-
+   **12 Commit:** 
+  -CountDown Timer now modifies itself and changes depending on the duration set by the contract. 
+  
+  

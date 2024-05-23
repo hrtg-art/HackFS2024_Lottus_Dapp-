@@ -64,7 +64,7 @@ const Home: NextPage = () => {
   const [LottusNumber, , ,] = CurrentLottus || [];
   const [, , LottusDesc] = CurrentLottus || [];
   const [, , , , , , , Charity] = CurrentLottus || [];
-  const isActive = CurrentLottus ? CurrentLottus[10] : false;
+  const isActive = CurrentLottus ? CurrentLottus[9] : false;
 
   const ethValueNumber = ethValue ? Number(BigInt(ethValue.toString())) : 0;
 

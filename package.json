@@ -28,7 +28,6 @@
     "next:lint": "yarn workspace @se-2/nextjs lint",
     "next:serve": "yarn workspace @se-2/nextjs serve",
     "precommit": "lint-staged",
-    "prepare": "install-self-peers -- --ignore-scripts",
     "start": "yarn workspace @se-2/nextjs dev",
     "test": "yarn hardhat:test",
     "vercel": "yarn workspace @se-2/nextjs vercel",
@@ -54,13 +53,22 @@
   },
   "dependencies": {
     "@0xsquid/sdk": "^2.8.0-beta.0",
-    "@0xsquid/squid-types": "^0.1.66",
+    "@0xsquid/squid-types": "^0.1.72",
+    "@0xsquid/widget": "^1.7.12",
     "@chainlink/contracts": "^1.1.0",
     "@ensdomains/ens-contracts": "^1.1.4",
+    "@ethersproject/solidity": "^5.0.0",
     "@huddle01/iframe": "^0.0.14",
+    "@huddle01/react": "^2.0.13",
+    "@huddle01/server-sdk": "^2.2.2",
     "@openzeppelin/contracts": "^5.0.2",
+    "@tanstack/query-core": "^5.36.1",
+    "@tanstack/react-query": "^5.37.1",
+    "ethers": "^5.7.2",
     "ipfs-http-client": "^60.0.1",
+    "ms": "^2.1.3",
     "text-to-image": "^5.2.0",
+    "unfetch": "^5.0.0",
     "util": "^0.12.5"
   }
 }

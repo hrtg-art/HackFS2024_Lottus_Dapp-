@@ -8,6 +8,7 @@ import Example from "~~/components/Banner";
 import Countdown from "~~/components/Countdown";
 import CounterComponent from "~~/components/CounterComponent";
 import PostLottusRoom from "~~/components/PostLottusVoiceRoom";
+import SquidWidgetIframe from "~~/components/SquidWidgetIframe";
 import UserBadges from "~~/components/UserBadges";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
@@ -228,10 +229,17 @@ const Home: NextPage = () => {
 
             <div className="divider divider-success"></div>
 
+            <div className="flex flex-col items-center pt-5 pb-10 space-y-5">
+              {" "}
+              <div className="stat-value">Lottus Runs on Base</div>
+              <SquidWidgetIframe />{" "}
+            </div>
+
             <div className="flex flex-col items-center pt-5 pb-10 space-y-10">
               <div className="flex justify-center items-center pt-5 pb-10 space-x-32">
                 {/* Columna 1 */}
-                <div className="flex-2">
+
+                <div className="flex-1">
                   <div className="indicator">
                     <div className="indicator-item indicator-bottom"></div>
                     <div className="stat-actions flex flex-col space-y-2 px-4">
@@ -264,8 +272,7 @@ const Home: NextPage = () => {
                             <div className="stat-value pt-3 pb-5">
                               {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH
                             </div>
-                            <div className="text-xl">Check your wallet for the Winner NFT for being</div>
-                            <div className="text-xl">A good soul with good luck</div>
+                            <div className="text-xl">Check your wallet for the Winner NFT</div>
                           </div>
                         ) : (
                           <div>
@@ -294,6 +301,12 @@ const Home: NextPage = () => {
                 </div>
               </div>
 
+              <div className=" gap-10">
+                <div className="flex justify-center flex-col">
+                  <UserBadges badges={userBadges || []} />
+                </div>
+              </div>
+
               {/* Mostrar PostLottusRoom solo cuando el Lottus haya terminado */}
               {!isActive && (
                 <div className="flex-2">
@@ -301,8 +314,6 @@ const Home: NextPage = () => {
                   <PostLottusRoom roomUrl="https://app.huddle01.com/scw-exwz-ett" />
                 </div>
               )}
-
-              <UserBadges badges={userBadges || []} />
             </div>
           </div>
         </div>

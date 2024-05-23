@@ -112,3 +112,11 @@ Entry for HackFS2024 By Heritage
   
    ![Lottus With info](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fggfggf.png?alt=media&token=69accc4e-fe9b-484b-bcd5-d5cac3ffb159)
 
+       **Eleventh Commit:** 
+  -Added SquidRouter to facilitate users from another blockchain to swap funds to participate, in the future the idea is to automate this process and allow them to buy tickets from any chain. 
+  
+
+  
+   ![Lottus With info](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-22_214601098.png?alt=media&token=952c0d89-34e6-44ba-b725-8663c602dd7a)
+
+

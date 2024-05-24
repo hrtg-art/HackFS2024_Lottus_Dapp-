@@ -127,7 +127,7 @@ Entry for HackFS2024 By Heritage
   =improvements on Smart Contract to retrieve events and info for uploading into light house
   
   
-     ![Lottus With info]https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-24_103311031.png?alt=media&token=b6debc44-f64a-415f-aff1-72255e3fa6e5) 
+     ![Lottus With info](https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-24_103311031.png?alt=media&token=b6debc44-f64a-415f-aff1-72255e3fa6e5) 
   
   
   

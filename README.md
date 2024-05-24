@@ -121,5 +121,14 @@ Entry for HackFS2024 By Heritage
 
    **12 Commit:** 
   -CountDown Timer now modifies itself and changes depending on the duration set by the contract. 
+
+   **13 Commit:** 
+  -Implemented storage on FileCoin to keep a registry of previous lottus, this will be useful to keep transparency and to help us distribute lottus tokens once we're ready to drop
+  =improvements on Smart Contract to retrieve events and info for uploading into light house
+  
+  
+     ![Lottus With info]https://firebasestorage.googleapis.com/v0/b/heartventure-18dee.appspot.com/o/Lottus%2Fimagen_2024-05-24_103311031.png?alt=media&token=b6debc44-f64a-415f-aff1-72255e3fa6e5) 
+  
+  
   
   

@@ -60,6 +60,7 @@ contract LottusLottery is Ownable {
     event PrizePoolDeposited(uint256 amount);
     event BannerCIDUpdated(uint256 indexed lotteryId, string newBannerCID);
     event BadgeAwarded(address indexed user, string badge);
+    event LotteryEnded(uint256 indexed lotteryId, string name, string description, uint256 ticketPrice, address charity, address[] participants, address winner, bytes32 txId, string bannerCID);
 
     constructor(address ownerAddress) {
         transferOwnership(ownerAddress);
@@ -76,7 +77,7 @@ contract LottusLottery is Ownable {
         address charity,
         uint256 duration // nuevo parámetro de duración en segundos
     ) external onlyOwner {
-        require(!currentLottery.isActive || block.timestamp >= currentLottery.endTime, "Previous lottery still active");
+        require(!currentLottery.isActive, "Previous lottery still active");
         require(ticketPrice > 0, "Ticket price must be greater than 0");
         require(charity != address(0), "Charity address cannot be zero address");
 
@@ -116,7 +117,6 @@ contract LottusLottery is Ownable {
         require(currentLottery.isActive, "No active lottery");
         require(quantity > 0, "Quantity must be greater than 0");
         require(msg.value == currentLottery.ticketPrice * quantity, "Incorrect total ticket price");
-        require(block.timestamp < currentLottery.endTime, "Lottery ended");
 
         if (!participantsMap[msg.sender]) {
             participantsMap[msg.sender] = true;
@@ -186,6 +186,18 @@ contract LottusLottery is Ownable {
         currentLottery.isActive = false;
         uint256 randomNumber = random();
         selectWinner(randomNumber);
+
+        emit LotteryEnded(
+            currentLottery.id,
+            currentLottery.name,
+            currentLottery.description,
+            currentLottery.ticketPrice,
+            currentLottery.charity,
+            participants,
+            currentLottery.winner,
+            keccak256(abi.encodePacked(blockhash(block.number), msg.sender)),
+            currentLottery.bannerCID
+        );
     }
 
     function selectWinner(uint256 randomNumber) internal {
@@ -228,12 +240,10 @@ contract LottusLottery is Ownable {
     }
 
     function getWinner() external view returns (address) {
-        require(!currentLottery.isActive, "Lottery still active");
         return currentLottery.winner;
     }
 
     function getCharity() external view returns (address) {
-        require(!currentLottery.isActive, "Lottery still active");
         return currentLottery.charity;
     }
 
@@ -291,7 +301,7 @@ contract LottusLottery is Ownable {
     function hasBadge(address user, string memory badge) external view returns (bool) {
         return users[user].badges[badge];
     }
-
+ 
     function getUserLevel(address user) external view returns (uint256) {
         return users[user].level;
     }

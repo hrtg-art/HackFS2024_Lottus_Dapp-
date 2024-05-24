@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import Example from "~~/components/Banner";
 import Countdown from "~~/components/Countdown";
 import CounterComponent from "~~/components/CounterComponent";
+import FilecoinComponent from "~~/components/FilecoinComponent";
 import PostLottusRoom from "~~/components/PostLottusVoiceRoom";
 import SquidWidgetIframe from "~~/components/SquidWidgetIframe";
 import UserBadges from "~~/components/UserBadges";
@@ -324,13 +325,14 @@ const Home: NextPage = () => {
         <h1 className="text-center p-5">
           <span className="stat-value p-20 text-6xl">More info:</span>
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-10">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-10 pb-10">
           {/* Columna 1: Ganadores Recientes y Donaciones Recientes */}
-          <div className="overflow-x-auto p-5 bg-base-300 shadow-lg rounded-box">
-            <h2 className="stat-value p-1 text-center">Check recent Events</h2>
+          <div className="overflow-x-auto p-5 bg-base-100 shadow-lg rounded-box">
+            <h2 className="stat-value p-1 text-center text-lg md:text-2xl">Check recent Events</h2>
 
             <div className="max-h-40 overflow-y-auto mb-5">
-              <h3 className="text-center">Winners Record</h3>
+              <h3 className="text-center text-md md:text-lg">Winners Record</h3>
               <table className="table w-full">
                 <thead>
                   <tr>
@@ -356,7 +358,7 @@ const Home: NextPage = () => {
             </div>
 
             <div className="max-h-40 overflow-y-auto">
-              <h3 className="text-center">Charities Record</h3>
+              <h3 className="text-center text-md md:text-lg">Charities Record</h3>
               <table className="table w-full">
                 <thead>
                   <tr>
@@ -383,24 +385,31 @@ const Home: NextPage = () => {
           </div>
 
           {/* Columna 2: Suggest the Next Charity */}
-          <div className="p-5 bg-base-300 shadow-lg rounded-box">
-            <h2 className="stat-value p-1 text-center">Suggest the Next Charity</h2>
-            <p className="mt-3 p-5 text-center">
+          <div className="p-5 bg-base-100 shadow-lg rounded-box">
+            <h2 className="stat-value p-1 text-center text-lg md:text-2xl">Suggest the Next Charity</h2>
+            <p className="mt-3 p-5 text-center text-sm md:text-base">
               You can suggest the next charity organization to donate to here. Share your suggestions and help decide
               the next cause to support.
             </p>
             <div className="flex justify-center mt-3">
-              <button className="btn btn-primary px-10">Fill the Form</button>
+              <a
+                href="https://discord.gg/dU7Am3PZdG"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-neutral px-10"
+              >
+                Propose on Discord
+              </a>
             </div>
           </div>
 
           {/* Columna 3: NFT Awards & Certificates */}
-          <div className="p-5 bg-base-300 shadow-lg rounded-box">
-            <h2 className="stat-value p-1 text-center">NFT Awards & Certificates</h2>
-            <div className="flex justify-center mt-3 space-x-10">
+          <div className="p-5 bg-base-100 shadow-lg rounded-box">
+            <h2 className="stat-value p-1 text-center text-lg md:text-2xl">NFT Awards & Certificates</h2>
+            <div className="flex flex-col md:flex-row justify-center mt-3 space-y-5 md:space-y-0 md:space-x-10">
               <div className="text-center">
-                <h3 className="text-lg font-bold mb-2">Winner NFT</h3>
-                <div className="w-40 h-40 bg-gray-300 flex items-center justify-center overflow-hidden rounded-box relative">
+                <h3 className="text-md md:text-lg font-bold mb-2">Winner NFT</h3>
+                <div className="w-full md:w-40 h-40 bg-gray-300 flex items-center justify-center overflow-hidden rounded-box relative">
                   {Winner ? (
                     <Image src={`https://ipfs.io/ipfs/${Winner}`} alt="Winner NFT" layout="fill" objectFit="cover" />
                   ) : (
@@ -411,8 +420,8 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <div className="text-center">
-                <h3 className="text-lg font-bold mb-2">Participant NFT</h3>
-                <div className="w-40 h-40 bg-gray-300 flex items-center justify-center overflow-hidden rounded-box relative">
+                <h3 className="text-md md:text-lg font-bold mb-2">Participant NFT</h3>
+                <div className="w-full md:w-40 h-40 bg-gray-300 flex items-center justify-center overflow-hidden rounded-box relative">
                   {Participant ? (
                     <Image
                       src={`https://ipfs.io/ipfs/${Participant}`}
@@ -428,10 +437,15 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
-            <p className="mt-3 text-center">
+            <p className="mt-3 text-center text-sm md:text-base">
               There may be more prizes depending on collaborations with other dApps or protocols.
             </p>
           </div>
+        </div>
+        <h2 className="stat-value text-center">Lottus Archives</h2>
+        <h2 className="stat-title text-center pb-10">Data Saved on FileCoin</h2>
+        <div className="overflow-x-auto  bg-base-100 shadow-lg rounded-box ">
+          <FilecoinComponent />
         </div>
       </div>
 
@@ -487,7 +501,7 @@ const Home: NextPage = () => {
         }
       `}</style>
 
-      <h1 className="text-center">
+      <h1 className="text-center pt-10">
         <span className="stat-value p-20 text-6xl">RoadMap:</span>
       </h1>
 

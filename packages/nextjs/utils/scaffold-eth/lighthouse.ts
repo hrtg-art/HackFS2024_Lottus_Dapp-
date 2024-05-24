@@ -1,7 +1,11 @@
 import lighthouse from "@lighthouse-web3/sdk";
 import axios from "axios";
 
-const apiKey = "a0a3ff39.28653254e05f4cdbbb7df9f5cfdeff35";
+const apiKey = process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY;
+
+if (!apiKey) {
+  throw new Error("Lighthouse API key is not defined");
+}
 
 export const uploadDataToLighthouse = async (data: object, path: string): Promise<string | undefined> => {
   try {

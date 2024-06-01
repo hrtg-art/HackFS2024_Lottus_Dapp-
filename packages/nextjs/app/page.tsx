@@ -96,6 +96,22 @@ const Home: NextPage = () => {
     }
   };
 
+  const { writeContractAsync: claimNFT } = useScaffoldWriteContract("LottusNFT");
+
+  // Handler function to claim the participant NFT
+  const handleClaimNFT = async () => {
+    try {
+      // Calling the claimParticipantNFT function of the contract
+      await claimNFT({
+        functionName: "claimParticipantNFT",
+        args: undefined,
+      });
+      console.log("NFT claimed successfully");
+    } catch (e) {
+      console.error("Error claiming NFT:", e);
+    }
+  };
+
   return (
     <>
       <Example />
@@ -283,7 +299,11 @@ const Home: NextPage = () => {
                             <div className="stat-value pt-3 pb-5">
                               {PrizeAmount ? Number(BigInt(PrizeAmount.toString())) / 1e18 : 0} ETH
                             </div>
-                            <button className="btn btn-primary px-10">Claim The proof that you are a good soul</button>
+                            <div>
+                              <button onClick={handleClaimNFT} className="btn btn-primary">
+                                Claim Participant NFT
+                              </button>
+                            </div>
                           </div>
                         )
                       ) : (

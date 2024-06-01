@@ -26,7 +26,7 @@ module.exports = {
           warning: "#FFCF72",
           error: "#FF8863",
 
-          "--rounded-btn": "9999rem",
+          "--rounded-btn": "1rem",
 
           ".tooltip": {
             "--tooltip-tail": "6px",

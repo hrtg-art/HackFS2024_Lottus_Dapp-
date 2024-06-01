@@ -15,7 +15,11 @@ const PostLottusRoom: React.FC<PostLottusRoomProps> = ({ roomUrl }) => {
 
   return (
     <div className="h-[600px] w-full card rounded-box place-items-center overflow-hidden">
-      <HuddleIframe roomUrl={roomUrl} className="w-[1000px] h-[800px] aspect-video" />
+      <HuddleIframe
+        roomUrl={roomUrl}
+        className="w-[1000px] h-[800px] aspect-video"
+        projectId={"QWgBhgmKqO8UGNUCxZvcElSJ8k36jZir"}
+      />
     </div>
   );
 };

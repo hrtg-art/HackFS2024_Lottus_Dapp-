@@ -6,7 +6,7 @@ const deployLottusContracts: DeployFunction = async function (hre: HardhatRuntim
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  const ownerAddress = "0x2f2ccC1a96E56Ae8F74CE7Fd1b97A7B5596BA1Ae";
+  const ownerAddress = "0xbbe43612b9B577d5d9cB786324880c01d5792Ebc";
 
   // Despliega el contrato LottusLottery
   const lottusLotteryDeployment = await deploy("LottusLottery", {

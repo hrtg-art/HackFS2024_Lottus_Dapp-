@@ -8,7 +8,7 @@
     ]
   },
   "scripts": {
-    "build": "yarn next:build",
+    "build": "yarn workspace @se-2/nextjs build", 
     "account": "yarn workspace @se-2/hardhat account",
     "chain": "yarn workspace @se-2/hardhat chain",
     "compile": "yarn workspace @se-2/hardhat compile",

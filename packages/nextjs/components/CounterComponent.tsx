@@ -22,7 +22,7 @@ const CounterComponent: React.FC<CounterComponentProps> = ({ ethValue, onQuantit
     onQuantityChange(count);
   }, [count, onQuantityChange]);
 
-  const total = (count * ethValue).toFixed(2);
+  const total = (count * ethValue).toFixed(3);
 
   return (
     <div className="flex flex-col items-center space-y-2">

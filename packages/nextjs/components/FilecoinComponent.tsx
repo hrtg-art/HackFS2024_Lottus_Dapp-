@@ -118,7 +118,7 @@ const FilecoinComponent: React.FC = () => {
 
       {/* Modal */}
       <dialog id="filecoin_modal" className="modal">
-        <div className="modal-box w-[700px] h-[800px] max-w-full">
+        <div className="modal-box w-[600px] h-[800px] max-w-full">
           <form method="dialog">
             <button
               onClick={() => setSelectedFile(null)}
@@ -135,7 +135,7 @@ const FilecoinComponent: React.FC = () => {
                   <img
                     src={`https://ipfs.io/ipfs/${selectedFile.bannerCID}`}
                     alt="Banner"
-                    width={800}
+                    width={500}
                     height={200}
                     style={{ objectFit: "cover", margin: "auto", borderRadius: "8px" }}
                   />

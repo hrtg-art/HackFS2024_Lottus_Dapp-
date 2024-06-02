@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { fetchFileContent, getUploads, uploadDataToLighthouse } from "../utils/scaffold-eth/lighthouse";
 import { Address } from "./scaffold-eth/Address";
 import { ethers } from "ethers";
@@ -95,12 +94,12 @@ const FilecoinComponent: React.FC = () => {
               <tr key={file.cid} className="text-center">
                 <td className="border py-2">
                   {file.bannerCID && (
-                    <Image
+                    <img
                       src={`https://ipfs.io/ipfs/${file.bannerCID}`}
                       alt="Banner"
                       width={200}
                       height={64}
-                      className="object-cover mx-auto rounded-box"
+                      style={{ objectFit: "cover", margin: "auto", borderRadius: "8px" }}
                     />
                   )}
                 </td>
@@ -133,12 +132,12 @@ const FilecoinComponent: React.FC = () => {
               <div className="text-center">
                 <h2 className="text-xl stat-value">Archive of: {selectedFile.name}</h2>
                 <div className="flex justify-center items-center mb-4">
-                  <Image
+                  <img
                     src={`https://ipfs.io/ipfs/${selectedFile.bannerCID}`}
                     alt="Banner"
                     width={800}
                     height={200}
-                    className="object-cover mx-auto rounded-box"
+                    style={{ objectFit: "cover", margin: "auto", borderRadius: "8px" }}
                   />
                 </div>
                 <h2 className="text-xl stat-value pt-5">Description:</h2>

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { NextPage } from "next";
 import { useAccount } from "wagmi";
 import Example from "~~/components/Banner";
@@ -50,7 +49,6 @@ const Home: NextPage = () => {
   });
 
   // Read user level and badges
-
   const { data: userBadges } = useScaffoldReadContract({
     contractName: "LottusLottery",
     functionName: "getUserBadges",
@@ -120,14 +118,23 @@ const Home: NextPage = () => {
         <div className="px-5">
           <h1 className="text-center ">
             <div className="flex justify-center items-center h-[240px] w-[600px] mx-auto card rounded-box overflow-hidden ">
-              <Image alt="SE2 logo" className="cursor-pointer object-cover" fill src="/LottusBanner.png" />
+              <img
+                alt="SE2 logo"
+                className="cursor-pointer object-cover"
+                style={{ width: "100%", height: "100%" }}
+                src="/LottusBanner.png"
+              />
             </div>
           </h1>
           <div className="flex flex-col w-full p-10">
             <div className="grid place-items-center">
               <div className="h-[600px] w-[1600px] card bg-base-300 rounded-box place-items-center overflow-hidden">
                 {Banner ? (
-                  <Image src={`https://ipfs.io/ipfs/${Banner}`} alt="Lottus Banner" layout="fill" objectFit="cover" />
+                  <img
+                    src={`https://ipfs.io/ipfs/${Banner}`}
+                    alt="Lottus Banner"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <span className="text-gray-500">No banner available</span>
@@ -431,7 +438,11 @@ const Home: NextPage = () => {
                 <h3 className="text-md md:text-lg font-bold mb-2">Winner NFT</h3>
                 <div className="w-full md:w-40 h-40 bg-gray-300 flex items-center justify-center overflow-hidden rounded-box relative">
                   {Winner ? (
-                    <Image src={`https://ipfs.io/ipfs/${Winner}`} alt="Winner NFT" layout="fill" objectFit="cover" />
+                    <img
+                      src={`https://ipfs.io/ipfs/${Winner}`}
+                      alt="Winner NFT"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <span className="text-gray-500">No Winner NFT available</span>
@@ -443,11 +454,10 @@ const Home: NextPage = () => {
                 <h3 className="text-md md:text-lg font-bold mb-2">Participant NFT</h3>
                 <div className="w-full md:w-40 h-40 bg-gray-300 flex items-center justify-center overflow-hidden rounded-box relative">
                   {Participant ? (
-                    <Image
+                    <img
                       src={`https://ipfs.io/ipfs/${Participant}`}
                       alt="Participant NFT"
-                      layout="fill"
-                      objectFit="cover"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
@@ -695,9 +705,8 @@ const Home: NextPage = () => {
             </div>
             <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
               <p>
-                The raffle winner is selected using Chainlink VRF Verifiable Random Function, which ensures that the
-                selection process is truly random and transparent. This technology provides a provably fair and
-                tamper-proof source of randomness, ensuring the integrity of the raffle.
+                The raffle winner is selected using a Random Function, which ensures that the selection process is truly
+                random and transparent.
               </p>
             </div>
           </div>
